@@ -7,6 +7,7 @@ const result = document.getElementById('equates');
 const displayScreen = document.querySelector('.display');
 
 let letsCalculate = true;
+let displayResult;
 let clickCount = 0
 let num = '';
 let opsValues = '';
@@ -25,53 +26,107 @@ let resultCalc = [];
 
 
     function displayText(){
-        displayScreen.innerHTML += displayEquation[displayEquation.length-1];   
+            displayScreen.innerHTML = `<h1> ${displayEquation.join('')}</h1>`;
+    }
+    
+    function inputNumbers(){
+                clickCount = 0;
+                num += e.target.value;
+                displayEquation.push(num);
+                console.log(displayEquation);
+                num = ''
     }
 
-    
-    numbers.forEach(function(numClick){
-    numClick.addEventListener('click',function(e){
-            e.preventDefault();
-            num += e.target.value;
-            displayEquation.push(num);
-            console.log(displayEquation);
-            displayText();
-            num = '';    
-})
-})
-    opsList.forEach(function(ops){
-        ops.addEventListener('click',function(e){
-            e.preventDefault();
-            if (displayEquation.length === 0){
+    //store operators when clicked...
+  
+    opsList.forEach(function(operators){
+        operators.addEventListener('click',function(e){
+            e.preventDefault;
+            if (letsCalculate==false){
+
+            }
+            inputOperators(e);
+        })
+    })
+
+
+    function inputOperators(e){
+        if(displayEquation.length == 0){
+        }
+        else if(clickCount == 0){
+            if (letsCalculate == false){
                 clearString();
+                displayEquation.push(`${displayResult}`);
+                clickCount++;
+                displayEquation.push(` ${e.target.textContent} `);
+                displayText();
+                letsCalculate = true;
             }
             else{
             clickCount++;
-            if (clickCount > 1){            
+            displayEquation.push(` ${e.target.textContent} `);
+             displayText();
+        }
+    }
+
+        else if(clickCount >= 1){
             displayEquation.pop();
-            opsValues += ` ${e.target.textContent} `;
-            displayEquation.push(opsValues);
-            opsValues = '';
+            displayEquation.push(` ${e.target.textContent} `);
             displayText();
-            }
-            else{
-              opsValues += ` ${e.target.textContent} `;
-              displayEquation.push(opsValues);
-              opsValues='';
-            displayText();
-            }
-        }})
-     })
-    
-  
-    result.addEventListener('click',function(e){
-        e.preventDefault();
-        
-       for(let i =0; i<displayEquation.length; i++){
-        displayVariable += displayEquation[i];
-       }
-       console.log(displayVariable);
-       displayEquation.push(` = ${eval(displayVariable)}`);
-       displayText();
+            clickCount++;
+        }
+    }
+
+
+    /// store the numbers when clicked
+
+    numbers.forEach(function(numClick){
+        numClick.addEventListener('click',function(e){
+                e.preventDefault();
+                inputNum(e);
+                
+    })
     })
 
+    function inputNum(e){
+        if (letsCalculate == false){
+            clearString();
+            letsCalculate = true;
+            clickCount = 0;
+            num += e.target.value;
+            displayEquation.push(num);
+            num = '';
+            displayText();
+        }
+         else{
+            clickCount = 0;
+            num += e.target.value;
+            displayEquation.push(num);
+            num = '';
+            displayText(); 
+    }
+    }
+
+    
+
+    clearText.addEventListener('click',function(e){
+        e.preventDefault();
+        displayEquation.pop();
+        displayText();
+    })
+
+    allClearText.addEventListener('click',function(e){
+        displayEquation = [];
+        displayText();
+    })
+
+    result.addEventListener('click',function(e){
+        let finalResult ='';
+        for(let i=0; i<displayEquation.length; i++){
+            finalResult +=displayEquation[i];
+        }
+        displayResult = eval(finalResult);
+        displayEquation.push(` = ${displayResult}`);
+        displayText();
+        letsCalculate = false;
+    })

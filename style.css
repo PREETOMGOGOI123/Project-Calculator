@@ -5,15 +5,28 @@ body{
     text-align: center;
     align-content: center;
     margin: 0;
+    margin-top: 2em;
+}
+.calculate {
+    width: 100%;
+   padding: 1.5em 0;
+   padding-right: 0.5em;
+   background-color: rgb(74, 82, 99);
+   align-items: center;
+   align-content: center;
 }
 
 input, button {
     width: 3.5em; 
     height: 3.5em;
-    margin: 0.25em;
-    background-color: aquamarine;
+    margin: .25em;
+    background-color: rgb(223, 214, 209);
     font-size: large;
+    border-radius: 50%;
+    border-style: 1px solid;
     color: black;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 500;
 }
 
 .main{
@@ -22,14 +35,23 @@ input, button {
     flex-direction: column;
     margin: auto;
     align-items: center;
-    border-style: 10px solid black;
+}
+
+div{
+    width: 100%;
 }
 
 .display {
+    display: flex;
     width: 100%;
     height: 80px;
-    background-color: white;
-    margin: 0;
+    padding: 0 0.5em;
+    background-color: black;
+    color: white;   
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    border: 10px solid rgb(197, 188, 188);
 }
 
 #funct, .numbers, .num-ops ol{
@@ -39,4 +61,8 @@ input, button {
 ol {
     list-style-type: none;
     margin: 0 auto;
+}
+
+h1{
+    margin: auto;
 }

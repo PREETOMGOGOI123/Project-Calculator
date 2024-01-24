@@ -1,132 +1,116 @@
-const mod =  document.getElementById('modulus');
-const clearText = document.getElementById('clear');
-const allClearText = document.getElementById('all-clear');
-const opsList = document.querySelectorAll('.operations');
-const numbers = document.querySelectorAll('.numbers');
-const result = document.getElementById('equates');
+
+const clearText = document.getElementById('clear');//gets the C button
+const allClearText = document.getElementById('all-clear');//gets AC button
+const opsList = document.querySelectorAll('.operations');// gets all the operator buttons
+const numbers = document.querySelectorAll('.numbers');//get all the number buttons
+const result = document.getElementById('equates'); // gets the '=' button
 const displayScreen = document.querySelector('.display');
 
+
+
+/// input numbers and operations as objects
+
+
+
 let letsCalculate = true;
-let displayResult;
 let clickCount = 0
-let num = '';
-let opsValues = '';
 let displayEquation = []
-let displayVariable = '';
 let resultCalc = [];
-
-    function clearString(){
-        num = '';
-        opsValues = '';
-        displayEquation = [];
-        displayVariable = '';
-        resultCalc = [];
-        clickCount = 0;
-    }
+const regex = /[+\-*/]/g;
 
 
-    function displayText(){
-            displayScreen.innerHTML = `<h1> ${displayEquation.join('')}</h1>`;
-    }
-    
-    function inputNumbers(){
-                clickCount = 0;
-                num += e.target.value;
-                displayEquation.push(num);
-                console.log(displayEquation);
-                num = ''
-    }
-
-    //store operators when clicked...
-  
-    opsList.forEach(function(operators){
-        operators.addEventListener('click',function(e){
-            e.preventDefault;
-            if (letsCalculate==false){
-
-            }
-            inputOperators(e);
-        })
-    })
-
-
-    function inputOperators(e){
+    // function to update the numbers and operators
+    function updateInput(event){
+        inputVariable = `${event.target.id}`;
+        let inputVariableText = `${event.target.innerText}`;
         if(displayEquation.length == 0){
-        }
-        else if(clickCount == 0){
-            if (letsCalculate == false){
-                clearString();
-                displayEquation.push(`${displayResult}`);
-                clickCount++;
-                displayEquation.push(` ${e.target.textContent} `);
-                displayText();
-                letsCalculate = true;
+            if (inputVariable == 'operator'){
+                alert('click a no');
+                return;
             }
             else{
-            clickCount++;
-            displayEquation.push(` ${e.target.textContent} `);
-             displayText();
+                displayEquation = [... displayEquation, inputVariableText];
+                console.log(displayEquation);
+                display()
+            }
+        }
+        else {
+            if (inputVariable == 'operator'){
+            if (clickCount == 0){
+                displayEquation = [... displayEquation, inputVariableText];
+                console.log(displayEquation);
+                display();
+                clickCount++;
+            }
+            else {
+                let newArray = displayEquation.splice(0,displayEquation.length-1);
+                displayEquation = [...newArray,inputVariableText];
+                console.log(displayEquation);
+                clickCount ++;
+                display();
+            }
+          
+        }
+        else{
+                clickCount = 0;
+                displayEquation = [... displayEquation, inputVariableText];
+                console.log(displayEquation);
+                display();
         }
     }
+        
+    }
+    
+    // function to introduce a new head element inside the display div
+    function display(){
+        displayScreen.innerHTML = `<h1>${displayEquation.join('')}</h1>`; 
 
-        else if(clickCount >= 1){
-            displayEquation.pop();
-            displayEquation.push(` ${e.target.textContent} `);
-            displayText();
-            clickCount++;
-        }
     }
 
+    // function to reset everything;
 
-    /// store the numbers when clicked
+    function allClear(){
+            num = '';
+            opsValues = '';
+            displayEquation = [];
+            inputVariable = '';
+            resultCalc = [];
+        clickCount = 0;
+            display();
+    }
+
+    // function to clear everything
+
+    function clear(){
+            let newArray = displayEquation.splice(0,displayEquation.length-1);
+            displayEquation = [...newArray,inputVariableText];
+    }
+
+    // function to claculate the final result
+
+    function calculateFinalResult() {
+        let finalResult = displayEquation.join('');
+            displayResult = eval(finalResult);
+            displayEquation.push(` = ${displayResult}`);
+            display();
+            letsCalculate = false;
+    }
+
+    // Event Listner Capturing the numbers
 
     numbers.forEach(function(numClick){
-        numClick.addEventListener('click',function(e){
-                e.preventDefault();
-                inputNum(e);
-                
-    })
+        numClick.addEventListener('click',updateInput);
     })
 
-    function inputNum(e){
-        if (letsCalculate == false){
-            clearString();
-            letsCalculate = true;
-            clickCount = 0;
-            num += e.target.value;
-            displayEquation.push(num);
-            num = '';
-            displayText();
-        }
-         else{
-            clickCount = 0;
-            num += e.target.value;
-            displayEquation.push(num);
-            num = '';
-            displayText(); 
-    }
-    }
+    opsList.forEach(function(ops){
+        ops.addEventListener('click',updateInput);
+    })
 
+    //Event Listner capturing the all clear button
+    allClearText.addEventListener('click',allClear);
+
+    //Event Listner to capture the equal button
+    result.addEventListener('click', calculateFinalResult);
+
+ 
     
-
-    clearText.addEventListener('click',function(e){
-        e.preventDefault();
-        displayEquation.pop();
-        displayText();
-    })
-
-    allClearText.addEventListener('click',function(e){
-        displayEquation = [];
-        displayText();
-    })
-
-    result.addEventListener('click',function(e){
-        let finalResult ='';
-        for(let i=0; i<displayEquation.length; i++){
-            finalResult +=displayEquation[i];
-        }
-        displayResult = eval(finalResult);
-        displayEquation.push(` = ${displayResult}`);
-        displayText();
-        letsCalculate = false;
-    })

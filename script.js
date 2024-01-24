@@ -4,11 +4,7 @@ const allClearText = document.getElementById('all-clear');//gets AC button
 const opsList = document.querySelectorAll('.operations');// gets all the operator buttons
 const numbers = document.querySelectorAll('.numbers');//get all the number buttons
 const result = document.getElementById('equates'); // gets the '=' button
-const displayScreen = document.querySelector('.display');
-
-
-
-/// input numbers and operations as objects
+const displayScreen = document.querySelector('.display');//gets the div where result will be displayed
 
 
 

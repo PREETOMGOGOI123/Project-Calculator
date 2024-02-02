@@ -1,132 +1,205 @@
-const mod =  document.getElementById('modulus');
-const clearText = document.getElementById('clear');
-const allClearText = document.getElementById('all-clear');
-const opsList = document.querySelectorAll('.operations');
-const numbers = document.querySelectorAll('.numbers');
-const result = document.getElementById('equates');
-const displayScreen = document.querySelector('.display');
 
-let letsCalculate = true;
-let displayResult;
-let clickCount = 0
-let num = '';
-let opsValues = '';
-let displayEquation = []
-let displayVariable = '';
-let resultCalc = [];
+const clearText = document.getElementById('clear'); //gets the C button
+const allClearText = document.getElementById('all-clear');//gets AC button
 
-    function clearString(){
-        num = '';
-        opsValues = '';
-        displayEquation = [];
-        displayVariable = '';
-        resultCalc = [];
-        clickCount = 0;
+const operators = document.querySelectorAll('.operator');// get all the operation elements.
+
+const numbers = document.querySelectorAll('.numbers');//get all the number buttons
+
+// selects the equal to button
+const resultEquals = document.getElementById('equates'); 
+const displayScreen = document.querySelector('.display');//gets the div where result will be displayed
+
+
+
+// object to store and remove input values
+const input={
+    num1 : [],
+    ops  : [],
+    num2 : [],
+    result : []
+};
+
+// operational functions stored into object
+const operations = {
+    '+': function(num1,num2){
+       return parseInt(num1) + parseInt(num2);
+    },
+    '-': function(num1,num2){
+        return parseInt(num1) - parseInt(num2);
+    },
+    '*':function(num1,num2){
+        return parseInt(num1) * parseInt(num2);
+    },
+    '/': function(num1,num2){
+        return parseInt(num1) / parseInt(num2);
+    },
+}
+
+// function to reset everything
+function resetInput(){
+ 
+        input.num1 = [];
+        input.num2 = [];
+        input.ops = []; 
+        input.result = [];
     }
 
+// function when C button is clicked
+function backspace() {
 
-    function displayText(){
-            displayScreen.innerHTML = `<h1> ${displayEquation.join('')}</h1>`;
+    if (input.result.length > 0) {
+        resetInput();
+    } 
+    else if (input.num2.length > 0) {
+        input.num2 = input.num2.slice(0, -1); 
+    } 
+    else if (input.ops.length > 0) {
+        input.ops = [];
+    } 
+    else if (input.num1.length > 0) {
+        input.num1 = input.num1.slice(0, -1); 
     }
+ 
+    display();
+}
+
+
+
+// function to calculate the inputs
+function calculate(){
+        let num1 = input.num1.join('');
+        let num2 = input.num2.join('');
+        let result = operations[input.ops[input.ops.length-1]](num1,num2);
+        resetInput();
+        input.result = [...input.result, result]; //Stores the result in input oibject
+}
+
+
+//function to push first number into in input object
+function pushFirstNumber(numValue){
+        input.num1 = [...input.num1, numValue];
+        
+}
+// function to push second number into input object
+function pushSecondNumber(numValue){
+        input.num2 = [...input.num2, numValue];
+}
+
+//function to operator into input object
+function pushOperator(opsValue){
+        input.ops = [...input.ops, opsValue];
+}
+
+// function to validated the input of second number
+function validateFirstNum(numValue){
     
-    function inputNumbers(){
-                clickCount = 0;
-                num += e.target.value;
-                displayEquation.push(num);
-                console.log(displayEquation);
-                num = ''
+    if(input.result.length > 0 || input.num1.length == 0){
+       resetInput();
+       pushFirstNumber(numValue);
+       display();
+       console.log(input);   
+    }
+    else if(input.ops.length == 0 ){
+       pushFirstNumber(numValue);
+       display();
+       console.log(input);
+    }else if (input.ops.length>0) {
+        validateSecondNum(numValue); //considering the number input for num2
+    }
+   
+}
+// function to validate the input of second number
+    function validateSecondNum(numValue) {
+        input.num2 = [...input.num2,numValue];
+        console.log(input);
+        display();
     }
 
-    //store operators when clicked...
-  
-    opsList.forEach(function(operators){
-        operators.addEventListener('click',function(e){
-            e.preventDefault;
-            if (letsCalculate==false){
+//function to push the capture operations value into input object
+function pushOperator(opsValue){
+    input.ops = [...input.ops, opsValue];
+    console.log(input);
+    display();
+}
 
-            }
-            inputOperators(e);
+
+// function to validate the intake of operations 
+function validateOps(opsValue){
+    if(input.result.length > 0){
+        input.num1 = [...input.num1,input.result[0]];
+        input.result = [];
+        pushOperator(opsValue);
+        console.log(input);
+        display();
+    }
+    else if(input.num1.length == 0){
+        resetInput();
+    }
+    else if(input.num1.length > 0 && input.num2.length == 0){
+        pushOperator(opsValue);
+        console.log(input);
+        display();
+    }
+    else if(input.num2.length > 0){
+         calculate();
+         input.num1 = [...input.num1,input.result[0]];
+         input.result = [];
+         pushOperator(opsValue);
+         display();
+    }
+    }
+
+    //function to display objects in screen
+    function display(){
+        if (input.num1.length > 0 && input.ops.length == 0){
+            displayScreen.innerHTML = `<h1>${input.num1.join('')}</h1>`
+        }
+        else if (input.ops.length > 0 && input.num2.length == 0 ){
+            displayScreen.innerHTML = `<h1>${input.num1.join('')} ${input.ops[input.ops.length - 1]}</h1>` 
+        }
+        else if (input.num2.length > 0){
+            displayScreen.innerHTML = `<h1>${input.num1.join('')} ${input.ops[input.ops.length - 1]} ${input.num2.join('')}</h1>` 
+        }
+        else if(input.result.length > 0){
+            displayScreen.innerHTML = `<h1>${input.result.join('')}</h1>`
+        } 
+        else{
+            displayScreen.innerHTML = `<h1></h1>`
+        }
+}
+
+
+//Event Listner for capturing numbers
+numbers.forEach(numClick =>{
+    numClick.addEventListener('click',function(event){
+        const numValue =  event.target.textContent;
+        validateFirstNum(numValue);
+    });
+
+})
+
+//event listners for capturing operations
+operators.forEach(opsClick =>{
+        opsClick.addEventListener('click',function(){
+            const opsValue = this.getAttribute('data-operation');
+            validateOps(opsValue);
         })
     })
 
+//event listner when '=' button is clicked
+resultEquals.addEventListener('click',function(){
+        calculate();
+        display(); 
+})
 
-    function inputOperators(e){
-        if(displayEquation.length == 0){
-        }
-        else if(clickCount == 0){
-            if (letsCalculate == false){
-                clearString();
-                displayEquation.push(`${displayResult}`);
-                clickCount++;
-                displayEquation.push(` ${e.target.textContent} `);
-                displayText();
-                letsCalculate = true;
-            }
-            else{
-            clickCount++;
-            displayEquation.push(` ${e.target.textContent} `);
-             displayText();
-        }
-    }
+// event listner AC button is clicked
+allClearText.addEventListener('click',function(){
+    resetInput();
+    display();
+})
 
-        else if(clickCount >= 1){
-            displayEquation.pop();
-            displayEquation.push(` ${e.target.textContent} `);
-            displayText();
-            clickCount++;
-        }
-    }
-
-
-    /// store the numbers when clicked
-
-    numbers.forEach(function(numClick){
-        numClick.addEventListener('click',function(e){
-                e.preventDefault();
-                inputNum(e);
-                
-    })
-    })
-
-    function inputNum(e){
-        if (letsCalculate == false){
-            clearString();
-            letsCalculate = true;
-            clickCount = 0;
-            num += e.target.value;
-            displayEquation.push(num);
-            num = '';
-            displayText();
-        }
-         else{
-            clickCount = 0;
-            num += e.target.value;
-            displayEquation.push(num);
-            num = '';
-            displayText(); 
-    }
-    }
-
-    
-
-    clearText.addEventListener('click',function(e){
-        e.preventDefault();
-        displayEquation.pop();
-        displayText();
-    })
-
-    allClearText.addEventListener('click',function(e){
-        displayEquation = [];
-        displayText();
-    })
-
-    result.addEventListener('click',function(e){
-        let finalResult ='';
-        for(let i=0; i<displayEquation.length; i++){
-            finalResult +=displayEquation[i];
-        }
-        displayResult = eval(finalResult);
-        displayEquation.push(` = ${displayResult}`);
-        displayText();
-        letsCalculate = false;
-    })
+// event listner when C button is clicked
+clearText.addEventListener('click',function(){
+    backspace();
+})

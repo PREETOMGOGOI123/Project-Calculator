@@ -14,40 +14,40 @@
     <section class="calculate">
     <div>
         <ol id="funct">
-            <li class="numbers"><input type="button" id="opening-brace" value="("></li>
-            <li class="numbers"><input type="button" id="closing-brace" value=")"></li>
+            <li class="numbers"><button class="num" id="closing-braces">(</li>
+            <li class="numbers"><button class="num" id="opening-braces">)</li>
             <li class="clearText"><button id="clear">C</button></li>
             <li class="clearText"><button id="all-clear">AC</button></li>
         </ol>
     </div>
     <div class="num-ops">
         <ol>
-            <li class="numbers"><input type="button" id="seven" value="7"></li>
-            <li class="numbers"><input type="button" id="eight" value="8"></li>
-            <li class="numbers"><input type="button" id="nine" value="9"></li>
-            <li class="operations"><button id="division">/</button></li>
+            <li class="numbers"><button id="seven" class="num">7</button></li>
+            <li class="numbers"><button id="eight" class="num">8</button></li>
+            <li class="numbers"><button id="nine" class="num">9</button></li>
+            <li class="operations"><button class="operator" data-operation="/">/</button></li>
         </ol>
         <ol> 
-            <li class="numbers"><input type="button" id="four" value="4"></li>
-            <li class="numbers"><input type="button" id="five" value="5"></li>
-            <li class="numbers"><input type="button" id="six" value="6"></li>
-            <li class="operations"><button id="multiply">*</button></li>
+            <li class="numbers"><button class="num" id="four">4</button></li>
+            <li class="numbers"><button  class="num" id="five">5</button></li>
+            <li class="numbers"><button class="num" id="six">6</button></li>
+            <li class="operations"><button class="operator" data-operation="*">X</button></li>
         </ol>
    
     
         <ol>
-            <li class="numbers"><input type="button" id="one" value="1"></li>
-            <li class="numbers"><input type="button" id="two" value="2"></li>
-            <li class="numbers"><input type="button" id="three" value="3"></li>
-            <li class="operations"><button id="addition">+</button></li>
+            <li class="numbers"><button id="one" class="num">1</button></li>
+            <li class="numbers"><button id="two" class="num">2</li>
+            <li class="numbers"><button id="three" class="num">3</li>
+            <li class="operations"><button class="operator" data-operation="+">+</button></li>
         </ol>
     
     
         <ol>
-            <li class="numbers"><input type="button" id="zero" value="0"></li>
-            <li class="numbers"><input type="button" id="dot" value="."></li>
-            <li class="result"><input type="button" id="equates" value="="></li>
-            <li class="operations"><button id="substract">-</button></li>
+            <li class="numbers"><button id="zero" class="num">0</button></li>
+            <li class="numbers"><button id="dot" class="num">.</button></li>
+            <li class="result"><button id="equates">=</button></li>
+            <li class="operations"><button class="operator" data-operation="-">-</button></li>
         </ol>   
     </div>
     </section>

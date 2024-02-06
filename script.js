@@ -6,6 +6,7 @@ const operators = document.querySelectorAll('.operator');// get all the operatio
 
 const numbers = document.querySelectorAll('.numbers');//get all the number buttons
 
+const decimal = document.querySelector('.decimal');
 // selects the equal to button
 const resultEquals = document.getElementById('equates'); 
 const displayScreen = document.querySelector('.display');//gets the div where result will be displayed
@@ -14,192 +15,183 @@ const displayScreen = document.querySelector('.display');//gets the div where re
 
 // object to store and remove input values
 const input={
-    num1 : [],
-    ops  : [],
-    num2 : [],
+    inputs : [],
     result : []
 };
 
 // operational functions stored into object
 const operations = {
-    '+': function(num1,num2){
-       return parseInt(num1) + parseInt(num2);
-    },
-    '-': function(num1,num2){
-        return parseInt(num1) - parseInt(num2);
-    },
-    '*':function(num1,num2){
-        return parseInt(num1) * parseInt(num2);
-    },
-    '/': function(num1,num2){
-        return parseInt(num1) / parseInt(num2);
-    },
-}
-
-// function to reset everything
-function resetInput(){
- 
-        input.num1 = [];
-        input.num2 = [];
-        input.ops = []; 
-        input.result = [];
-    }
-
-// function when C button is clicked
-function backspace() {
-
-    if (input.result.length > 0) {
-        resetInput();
-    } 
-    else if (input.num2.length > 0) {
-        input.num2 = input.num2.slice(0, -1); 
-    } 
-    else if (input.ops.length > 0) {
-        input.ops = [];
-    } 
-    else if (input.num1.length > 0) {
-        input.num1 = input.num1.slice(0, -1); 
-    }
- 
-    display();
-}
-
-
-
-// function to calculate the inputs
-function calculate(){
-        let num1 = input.num1.join('');
-        let num2 = input.num2.join('');
-        let result = operations[input.ops[input.ops.length-1]](num1,num2);
-        resetInput();
-        input.result = [...input.result, result]; //Stores the result in input oibject
-}
-
-
-//function to push first number into in input object
-function pushFirstNumber(numValue){
-        input.num1 = [...input.num1, numValue];
+    '+': sumFunc,
+       
+    '-': minusFunc,
         
-}
-// function to push second number into input object
-function pushSecondNumber(numValue){
-        input.num2 = [...input.num2, numValue];
-}
-
-//function to operator into input object
-function pushOperator(opsValue){
-        input.ops = [...input.ops, opsValue];
-}
-
-// function to validated the input of second number
-function validateFirstNum(numValue){
-    
-    if(input.result.length > 0 || input.num1.length == 0){
-       resetInput();
-       pushFirstNumber(numValue);
-       display();
-       console.log(input);   
-    }
-    else if(input.ops.length == 0 ){
-       pushFirstNumber(numValue);
-       display();
-       console.log(input);
-    }else if (input.ops.length>0) {
-        validateSecondNum(numValue); //considering the number input for num2
-    }
-   
-}
-// function to validate the input of second number
-    function validateSecondNum(numValue) {
-        input.num2 = [...input.num2,numValue];
-        console.log(input);
-        display();
+    '*': multiplyfunc,
+        
+    '/': divFunction   
     }
 
-//function to push the capture operations value into input object
-function pushOperator(opsValue){
-    input.ops = [...input.ops, opsValue];
+// function to calculate addition of two numbers
+function sumFunc(){
+    let result = input.inputs[0]+input.inputs[2];
+    input.result = [...input.result, result] // pushes result inside the array inputArray.result
+}
+//function to calculate substraction of two numbers
+function minusFunc(){
+    let result = input.inputs[0]-input.inputs[2];
+    input.result = [...input.result, result]
+}
+// function to calculate multiplication of two numbers
+function multiplyfunc(){  
+    let result = input.inputs[0]*input.inputs[2];
+    input.result = [...input.result, result]
     console.log(input);
+}
+//  function to calculate the division of two numbers
+function divFunction(){
+    let result = input.inputs[0]*input.inputs[2];
+    input.result = [...input.result, result]
+    console.log(input);
+}
+
+
+// function to call the operations when calculation needs to be performed
+function calculate(){
+   operations[input.inputs[1]]();
+   input.inputs = [];
+   input.inputs = [...input.inputs,input.result[0]]
+}
+
+// function to reset the input array
+function allClear(){
+    input.inputs = [];
+    input.result = [];
     display();
 }
 
-
-// function to validate the intake of operations 
-function validateOps(opsValue){
-    if(input.result.length > 0){
-        input.num1 = [...input.num1,input.result[0]];
-        input.result = [];
-        pushOperator(opsValue);
-        console.log(input);
-        display();
-    }
-    else if(input.num1.length == 0){
-        resetInput();
-    }
-    else if(input.num1.length > 0 && input.num2.length == 0){
-        pushOperator(opsValue);
-        console.log(input);
-        display();
-    }
-    else if(input.num2.length > 0){
-         calculate();
-         input.num1 = [...input.num1,input.result[0]];
-         input.result = [];
-         pushOperator(opsValue);
-         display();
-    }
-    }
-
-    //function to display objects in screen
+// function to display operations on screen
     function display(){
-        if (input.num1.length > 0 && input.ops.length == 0){
-            displayScreen.innerHTML = `<h1>${input.num1.join('')}</h1>`
-        }
-        else if (input.ops.length > 0 && input.num2.length == 0 ){
-            displayScreen.innerHTML = `<h1>${input.num1.join('')} ${input.ops[input.ops.length - 1]}</h1>` 
-        }
-        else if (input.num2.length > 0){
-            displayScreen.innerHTML = `<h1>${input.num1.join('')} ${input.ops[input.ops.length - 1]} ${input.num2.join('')}</h1>` 
-        }
-        else if(input.result.length > 0){
-            displayScreen.innerHTML = `<h1>${input.result.join('')}</h1>`
-        } 
-        else{
-            displayScreen.innerHTML = `<h1></h1>`
-        }
+       displayScreen.innerHTML = `<h1>${input.inputs.join('')}</h1>`;
 }
+
+// function to capture input numbers and operations
+function captureInput(inputValue){
+    input.inputs = [...input.inputs, inputValue];
+    console.log(input);
+}
+
+//function to validate input of numbers
+function validateInputNumber(inputValue){
+    if (input.result.length > 0){
+        allClear();
+        captureInput(inputValue);
+    }
+    else if(typeof input.inputs[input.inputs.length - 1] == 'number'){
+        captureInput(inputValue);
+        let spliced = parseFloat(input.inputs.splice(-2,2).join('')); //{ Remove the last two elements of the input.inputs array and then combine them into one integer}
+        input.inputs = [...input.inputs, spliced];
+        console.log(input);
+    }
+    else if(input.inputs[input.inputs.length - 1] == '.'){
+        captureInput(inputValue);
+        let decimalNum = parseFloat(input.inputs.splice(-3,3).join('')); //{Remove the last three elements of the input.inputs array and combine them to a decimal integer}
+        input.inputs = [...input.inputs,decimalNum];
+        console.log(input);
+    }
+    else{
+        captureInput(inputValue);
+    }
+    display();
+}
+
+//function to validate input of operations 
+function validateInputOps(inputValue){
+   if (input.inputs.length == 0){
+    return;
+   }
+   else if(typeof input.inputs[input.inputs.length-1] !== 'number'){
+    let spliced = input.inputs.splice(1);
+    console.log(spliced);
+    captureInput(inputValue);
+    console.log(input);
+   }
+   else if(input.inputs.length == 3){
+   calculate();
+   captureInput(inputValue);
+   input.result = [];
+   }
+   else{
+    captureInput(inputValue);
+    input.result = [];
+   }
+   display();
+}
+
+//function to validate the input of decimal
+function validateInputDecimal(inputValue){
+    if(input.inputs.length == 0 || input.inputs[input.inputs.length - 1] == '.'){
+        return;
+    }
+    else {
+        captureInput(inputValue);
+    }
+    display();
+}
+
 
 
 //Event Listner for capturing numbers
 numbers.forEach(numClick =>{
     numClick.addEventListener('click',function(event){
-        const numValue =  event.target.textContent;
-        validateFirstNum(numValue);
+        const inputValue =  parseInt(event.target.textContent);
+        validateInputNumber(inputValue);
+        })
     });
 
-})
 
 //event listners for capturing operations
 operators.forEach(opsClick =>{
         opsClick.addEventListener('click',function(){
-            const opsValue = this.getAttribute('data-operation');
-            validateOps(opsValue);
+            const inputValue = this.getAttribute('data-operation');
+            validateInputOps(inputValue); 
         })
-    })
-
-//event listner when '=' button is clicked
-resultEquals.addEventListener('click',function(){
-        calculate();
-        display(); 
 })
 
-// event listner AC button is clicked
-allClearText.addEventListener('click',function(){
-    resetInput();
+//event listener when decimal button is clicked
+decimal.addEventListener('click',function(e){
+    const inputValue = e.target.textContent;
+    validateInputDecimal(inputValue);
+})
+
+//event listner when '=' button is clicked
+    resultEquals.addEventListener('click',function(){
+    if(input.inputs.length == 3){
+        calculate();
+    }
+    else if(input.inputs.length == 2){ 
+        input.inputs = [...input.inputs, input.inputs[0]];
+        input.result = [];
+        calculate();    
+    }
+    else{
+        console.log(input);
+    }
     display();
 })
 
+// event listner AC button is clicked
+    allClearText.addEventListener('click',function(){
+    allClear();
+})
+
 // event listner when C button is clicked
-clearText.addEventListener('click',function(){
-    backspace();
+    clearText.addEventListener('click',function(){
+    input.inputs.splice(-1,1);
+    console.log(input);
+})
+
+//event listner when decimal button is clicked
+decimal.addEventListener('click',function(e){
+    e.stopPropagation
+    const inputValue = e.target.textContent;
+    validateInputDecimal(inputValue);
 })

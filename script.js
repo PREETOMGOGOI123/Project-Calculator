@@ -31,24 +31,24 @@ const operations = {
     }
 
 // function to calculate addition of two numbers
-function sumFunc(){
-    let result = input.inputs[0]+input.inputs[2];
+function sumFunc(numA, numB){
+    let result = parseFloat(numA) + parseFloat(numB);
     input.result = [...input.result, result] // pushes result inside the array inputArray.result
 }
 //function to calculate substraction of two numbers
-function minusFunc(){
-    let result = input.inputs[0]-input.inputs[2];
+function minusFunc(numA,numB){
+    let result = parseFloat(numA) - parseFloat(numB);
     input.result = [...input.result, result]
 }
 // function to calculate multiplication of two numbers
-function multiplyfunc(){  
-    let result = input.inputs[0]*input.inputs[2];
+function multiplyfunc(numA,numB){  
+    let result = parseFloat(numA,numB) * parseFloat(numB);
     input.result = [...input.result, result]
     console.log(input);
 }
 //  function to calculate the division of two numbers
-function divFunction(){
-    let result = input.inputs[0]*input.inputs[2];
+function divFunction(numA,numB){
+    let result = parseFloat(numA,numB)/parseFloat(numB);
     input.result = [...input.result, result]
     console.log(input);
 }
@@ -56,7 +56,9 @@ function divFunction(){
 
 // function to call the operations when calculation needs to be performed
 function calculate(){
-   operations[input.inputs[1]]();
+   let numA = input.inputs[0];
+   let numB = input.inputs[2]
+   operations[input.inputs[1]](numA,numB);
    input.inputs = [];
    input.inputs = [...input.inputs,input.result[0]]
 }
